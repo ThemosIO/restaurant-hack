@@ -2,11 +2,11 @@ import { useState } from 'react';
 import './App.css';
 
 const lastDay = 17;
-const RESTAURANTS = {
-  SPONDI: 252,
-  SENSE: 646,
-  ZILLERS: 652,
-};
+const restaurants = [
+  { name: 'Spondi', code: 252 },
+  { name: 'Sense', code: 646 },
+  { name: 'Zillers', code: 652 },
+];
 
 function App() {
   const [slots, setSlots] = useState({});
@@ -42,12 +42,13 @@ function App() {
   return (
     <div className='container'>
       <div className='buttons'>
-        <div className='button' onClick={handleRunBatch(RESTAURANTS.SPONDI)}>Spondi</div>
-        <div className='button' onClick={handleRunBatch(RESTAURANTS.SENSE)}>Sense</div>
-        <div className='button' onClick={handleRunBatch(RESTAURANTS.ZILLERS)}>Zillers</div>
+        {restaurants.map(r =>
+          <div className='button' onClick={handleRunBatch(r.code)}>{r.name}</div>)}
       </div>
       <div className='results'>
-        {Object.keys(slots).length > 0 && <div className='title'>Found slots:</div>}
+        {Object.keys(slots).length > 0
+          ? <div className='title'>Found {Object.keys(slots).length} slots:</div>
+          : finished && <div className='title'>No slots found ☹</div>}
         {Object.keys(slots).map(k =>
           <div key={k}>
             <div className='date'>{k}/4/22</div>
@@ -55,7 +56,6 @@ function App() {
           </div>)}
       </div>
       {searching && <div className='searching'>Searching..</div>}
-      {finished && <div className='finished'>Finished ✓</div>}
     </div>
   );
 }
