@@ -41,6 +41,7 @@ function App() {
 
   return (
     <div className='container'>
+      Find restaurant to dine 4
       <div className='buttons'>
         {restaurants.map(r =>
           <div className='button' onClick={handleRunBatch(r.code)}>{r.name}</div>)}
