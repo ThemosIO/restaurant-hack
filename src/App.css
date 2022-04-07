@@ -33,6 +33,7 @@ body::before {
   flex-wrap: wrap;
   justify-content: center;
   padding: 1rem;
+  align-items: center;
 }
 .button {
   display: flex;
@@ -43,6 +44,10 @@ body::before {
   padding: 0.5rem 1rem;
   margin: 0.5rem;
   background: black;
+}
+.button.clicked {
+  background: #20C20E;
+  color: black;
 }
 .results {
   width: 100%;
@@ -63,4 +68,9 @@ body::before {
 }
 .searching, .finished {
   padding: 1rem;
+}
+
+.diners {
+  display: flex;
+  align-items: center;
 }

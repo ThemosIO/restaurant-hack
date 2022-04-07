@@ -11,17 +11,19 @@ const restaurants = [
 
 function App() {
   const [slots, setSlots] = useState({});
+  const [diners, setDiners] = useState(0);
+  const [code, setCode] = useState();
   const [searching, setSearching] = useState(false);
   const [finished, setFinished] = useState(false);
   var today = new Date().getUTCDate();
 
-  const url = (restaurant, day) => `https://ireserve.i-host.gr/IReserve/SearchAvailability/${restaurant}/2022-04-${day}%2019:00/4/DINEATHENS/`;
+  const url = (restaurant, day, people) => `https://ireserve.i-host.gr/IReserve/SearchAvailability/${restaurant}/2022-04-${day}%2019:00/${people}/DINEATHENS/`;
 
-  const requestBatch = async (restaurant) => {
+  const requestBatch = async (restaurant, people) => {
     setSlots({});
     setSearching(true);
     setFinished(false);
-    const req = async (day) => fetch(url(restaurant, day), { mode: 'cors' })
+    const req = async (day, people) => fetch(url(restaurant, day, people), { mode: 'cors' })
       .then((res) => res.json())
       .then(data => (data?.slots || [])?.length > 0 &&
         setSlots(old => ({ ...old, [day]: data?.slots })))
@@ -29,26 +31,35 @@ function App() {
 
     for (let i = today + 1; i <= lastDay; i++) {
       console.log(`>> restaurant:${restaurant}, day:${i}`);
-      await req(i);
+      await req(i, people);
     }
     setSearching(false);
     setFinished(true);
   };
 
-  const handleRunBatch = (name) => async () => {
-    console.log(`>> batch for restaurant:${name}`);
-    await requestBatch(name);
+  const handleRunBatch = (name, people) => async () => {
+    console.log(`>> batch for restaurant:${name} for ${people}`);
+    setCode(name);
+    await requestBatch(name, people);
   }
+
+  const handleDiners = (num) => () => setDiners(num);
 
   return (
     <div className='container'>
-      Find restaurant to dine 4
+      <div className='diners'>
+        Diners:
+        <div className={`button ${diners === 2 && 'clicked'}`} onClick={handleDiners(2)}>2</div>/
+        <div className={`button ${diners === 4 && 'clicked'}`} onClick={handleDiners(4)}>4</div>
+      </div>
       <div className='buttons'>
-        {restaurants.map(r =>
-          <div className='button' onClick={handleRunBatch(r.code)}>{r.name}</div>)}
+        {diners > 0 && <div>Restaurants:</div>}
+        {diners > 0 && restaurants.map(r =>
+          <div className={`button ${code === r.code && 'clicked'}`}
+            onClick={handleRunBatch(r.code, diners)}>{r.name}</div>)}
       </div>
       <div className='results'>
-        {Object.keys(slots).length > 0
+        {diners > 0 && Object.keys(slots).length > 0
           ? <div className='title'>Found {Object.keys(slots).length} slots:</div>
           : finished && <div className='title'>No slots found ☹</div>}
         {Object.keys(slots).map(k =>
