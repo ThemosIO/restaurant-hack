@@ -7,7 +7,7 @@ const restaurants = [
   { name: 'Sense', code: 646 },
   { name: 'Zillers', code: 652 },
   { name: 'CTC', code: 618 },
-  { name: 'Ovio', code: 242 },
+  { name: 'Ovio', code: 242, isEarly: true },
 ];
 
 function App() {
@@ -18,13 +18,13 @@ function App() {
   const [finished, setFinished] = useState(false);
   var today = new Date().getUTCDate();
 
-  const url = (restaurant, day, people) => `https://ireserve.i-host.gr/IReserve/SearchAvailability/${restaurant}/2022-04-${day}%2015:00/${people}/DINEATHENS/`;
+  const url = (restaurant, day, people, isEarly) => `https://ireserve.i-host.gr/IReserve/SearchAvailability/${restaurant}/2022-04-${day}%20${isEarly ? '15' : '19'}:00/${people}/DINEATHENS/`;
 
-  const requestBatch = async (restaurant, people) => {
+  const requestBatch = async (restaurant, people, isEarly) => {
     setSlots({});
     setSearching(true);
     setFinished(false);
-    const req = async (day, people) => fetch(url(restaurant, day, people), { mode: 'cors' })
+    const req = async (day, people) => fetch(url(restaurant, day, people, isEarly), { mode: 'cors' })
       .then((res) => res.json())
       .then(data => (data?.slots || [])?.length > 0 &&
         setSlots(old => ({ ...old, [day]: data?.slots })))
@@ -41,7 +41,8 @@ function App() {
   const handleRunBatch = (name, people) => async () => {
     console.log(`>> batch for restaurant:${name} for ${people}`);
     setCode(name);
-    await requestBatch(name, people);
+    const isEarly = (restaurants.find(r => r.name === name) || {}).isEarly || false;
+    await requestBatch(name, people, isEarly);
   }
 
   const handleDiners = (num) => () => setDiners(num);
