@@ -68,7 +68,7 @@ function App() {
             <div className='date'>{k}/4/22</div>
             {(slots[k] || [])?.map(s => s.time)
               .filter((val, ind, self) => self.indexOf(val) === ind)
-              .map(s => <div key={s.time}> - {s.time}</div>)}
+              .map(s => <div key={s}> - {s}</div>)}
           </div>)}
       </div>
       {searching && <div className='searching'>Searching..</div>}
