@@ -7,6 +7,7 @@ const restaurants = [
   { name: 'Sense', code: 646 },
   { name: 'Zillers', code: 652 },
   { name: 'CTC', code: 618 },
+  { name: 'Ovio', code: 242 },
 ];
 
 function App() {
