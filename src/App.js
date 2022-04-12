@@ -57,7 +57,7 @@ function App() {
       <div className='buttons'>
         {diners > 0 && <div>Restaurants:</div>}
         {diners > 0 && restaurants.map(r =>
-          <div className={`button ${code === r.code && 'clicked'}`}
+          <div key={r.code} className={`button ${code === r.code && 'clicked'}`}
             onClick={handleRunBatch(r.code, diners)}>{r.name}</div>)}
       </div>
       <div className='results'>
