@@ -41,7 +41,7 @@ function App() {
   const handleRunBatch = (name, people) => async () => {
     console.log(`>> batch for restaurant:${name} for ${people}`);
     setCode(name);
-    const isEarly = (restaurants.find(r => r.name === name) || {}).isEarly || false;
+    const isEarly = (restaurants.find(r => r.code === name) || {}).isEarly || false;
     await requestBatch(name, people, isEarly);
   }
 
