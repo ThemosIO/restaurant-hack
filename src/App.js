@@ -18,7 +18,7 @@ function App() {
   const [finished, setFinished] = useState(false);
   var today = new Date().getUTCDate();
 
-  const url = (restaurant, day, people) => `https://ireserve.i-host.gr/IReserve/SearchAvailability/${restaurant}/2022-04-${day}%2019:00/${people}/DINEATHENS/`;
+  const url = (restaurant, day, people) => `https://ireserve.i-host.gr/IReserve/SearchAvailability/${restaurant}/2022-04-${day}%2015:00/${people}/DINEATHENS/`;
 
   const requestBatch = async (restaurant, people) => {
     setSlots({});
